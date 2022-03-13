@@ -1,0 +1,163 @@
+{
+	"compiler": {
+		"version": "0.8.12+commit.f00d7308"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "payable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidState",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "OnlyBuyer",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "OnlySeller",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "abort",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "buyer",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "confirmPurchase",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "confirmReceived",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "paySeller",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "seller",
+				"outputs": [
+					{
+						"internalType": "address payable",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "state",
+				"outputs": [
+					{
+						"internalType": "enum PurchaseAgreement.State",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "value",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"errors": {
+				"InvalidState()": [
+					{
+						"notice": "The function cannot be called at the current state."
+					}
+				],
+				"OnlyBuyer()": [
+					{
+						"notice": "Ony the buyer can call this function"
+					}
+				],
+				"OnlySeller()": [
+					{
+						"notice": "Ony the seller can call this function"
+					}
+				]
+			},
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/1_PurchaseAgreement.sol": "PurchaseAgreement"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/1_PurchaseAgreement.sol": {
+			"keccak256": "0x91ec806f50f576f23c70e78de854742d5667668c4e463008d4e9390f5e3b0a82",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2f8b3e191bb4a0a45dc43fac4e535878140749067593d76dc1d5177f15c320dd",
+				"dweb:/ipfs/QmSVMWBd5JctVLvuz1KBf6KfaPkF9yUuvWvuEYFfM2CYMU"
+			]
+		}
+	},
+	"version": 1
+}
