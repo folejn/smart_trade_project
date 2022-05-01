@@ -3,17 +3,23 @@ import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from flask_jwt_extended import JWTManager
+from config import Config
 
 app = Flask(__name__)
+app.config.from_object(Config)
 
 client = app.test_client()
 
 engine = create_engine('sqlite:///db.sqlite')
 
-session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+session = scoped_session(sessionmaker(
+    autocommit=False, autoflush=False, bind=engine))
 
 Base = declarative_base()
 Base.query = session.query_property()
+
+jwt = JWTManager(app)
 
 from models import *
 
@@ -249,7 +255,7 @@ def delete_shop(shop_id):
     if not item:
         return {'message': 'No shop with the same id'}, 400
     session.delete(item)
-    session.commite()
+    session.commit()
     return '', 204
 
 
@@ -259,7 +265,7 @@ def delete_product(product_id):
     if not item:
         return {'message': 'No product with the same id'}, 400
     session.delete(item)
-    session.commite()
+    session.commit()
     return '', 204
 
 
@@ -269,8 +275,18 @@ def delete_transaction(transaction_id):
     if not item:
         return {'message': 'No transaction with the same id'}, 400
     session.delete(item)
-    session.commite()
+    session.commit()
     return '', 204
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    params = request.json
+    user = User(**params)
+    session.add(user)
+    session.commit()
+    token = user.get_token()
+    return {'access_token': token}
 
 
 @app.teardown_appcontext
