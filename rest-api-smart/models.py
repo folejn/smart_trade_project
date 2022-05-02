@@ -18,8 +18,8 @@ class User(Base):
     name = db.Column(db.String(250), nullable=False)
     email = db.Column(db.String(250), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
-    videos = relationship('Video', backref='user', lazy=True)
 
+    
     def __init__(self, **kwargs):
         self.name = kwargs.get('name')
         self.email = kwargs.get('email')
