@@ -176,7 +176,7 @@ def update_users():
 
 
 @app.route('/transaction', methods=['POST'])
-def update_transaction():
+def new_transaction():
     new_one = Transaction(**request.json)
     session.add(new_one)
     session.commit()
