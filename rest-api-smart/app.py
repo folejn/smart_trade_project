@@ -3,6 +3,7 @@ import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from re import search
 
 app = Flask(__name__)
 
@@ -147,7 +148,7 @@ def update_stores():
 
 
 @app.route('/products', methods=['POST'])
-def update_products():
+def new_product():
     new_one = Product(**request.json)
     session.add(new_one)
     session.commit()
@@ -224,9 +225,9 @@ def update_product(product_id):
     }
     return serialised
 
-@app.route('/products/<string:product_subname>', methods=['GET'])
+@app.route('/products/name/<string:product_subname>', methods=['GET'])
 def search_product_by_name(product_subname):
-    products = Product.query.filter(product_subname in Product.name).all()
+    products = Product.query.filter(Product.name.contains(product_subname)).all()
     if not products:
         return jsonify([])
     serialised = []
@@ -240,9 +241,9 @@ def search_product_by_name(product_subname):
         })
     return jsonify(serialised)
 
-@app.route('/products/<string:product_subdescr>', methods=['GET'])
-def search_product_by_name(product_subdescr):
-    products = Product.query.filter(product_subdescr in Product.description).all()
+@app.route('/products/description/<string:product_subdescr>', methods=['GET'])
+def search_product_by_desc(product_subdescr):
+    products = Product.query.filter(Product.description.contains(product_subdescr)).all()
     if not products:
         return jsonify([])
     serialised = []

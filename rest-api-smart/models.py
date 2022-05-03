@@ -34,6 +34,7 @@ class Product(Base):
     status = db.Column(db.String(20), nullable=False)
     quantity = db.Column(db.Integer, nullable=True)
     description = db.Column(db.Text, nullable=True)
+    users_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 class Transaction(Base):
