@@ -87,7 +87,7 @@ def delete_shop(shop_id):
     if not item:
         return {'message': 'No shop with the same id'}, 400
     session.delete(item)
-    session.commite()
+    session.commit()
     return '', 204
 
 
