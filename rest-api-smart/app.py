@@ -224,6 +224,38 @@ def update_product(product_id):
     }
     return serialised
 
+@app.route('/products/<string:product_subname>', methods=['GET'])
+def search_product_by_name(product_subname):
+    products = Product.query.filter(product_subname in Product.name).all()
+    if not products:
+        return jsonify([])
+    serialised = []
+    for product in products:
+        serialised.append({
+            'id': product.id,
+            'name': product.name,
+            'description': product.description,
+            'quantity': product.quantity,
+            'price': product.price
+        })
+    return jsonify(serialised)
+
+@app.route('/products/<string:product_subdescr>', methods=['GET'])
+def search_product_by_name(product_subdescr):
+    products = Product.query.filter(product_subdescr in Product.description).all()
+    if not products:
+        return jsonify([])
+    serialised = []
+    for product in products:
+        serialised.append({
+            'id': product.id,
+            'name': product.name,
+            'description': product.description,
+            'quantity': product.quantity,
+            'price': product.price
+        })
+    return jsonify(serialised)
+
 
 @app.route('/transaction/<int:transaction_id>', methods=['PUT'])
 def update_transaction(transaction_id):
