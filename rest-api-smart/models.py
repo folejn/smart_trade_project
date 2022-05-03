@@ -5,6 +5,11 @@ transaction_user = db.Table('junction', Base.metadata,
     db.Column('users_id', db.Integer, db.ForeignKey('users.id')),
     db.Column('transaction_id', db.Integer, db.ForeignKey('transaction.id'))
 )
+
+transaction_product = db.Table('junction_2', Base.metadata,
+    db.Column('transaction_id', db.Integer, db.ForeignKey('transaction.id')),
+    db.Column('products_id', db.Integer, db.ForeignKey('products.id'))
+)
 class Store(Base):
     __tablename__ = 'stores'
     id = db.Column(db.Integer, primary_key=True)
@@ -38,3 +43,5 @@ class Transaction(Base):
     price = db.Column(db.Integer, nullable=True)
     sides = relationship("User",
                     secondary=transaction_user, backref='transactions')
+    wares = relationship("Product",
+                    secondary=transaction_product, backref='transactions')
