@@ -3,7 +3,6 @@ import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from re import search
 
 app = Flask(__name__)
 
@@ -100,6 +99,7 @@ def get_products():
             'id': product.id,
             'name': product.name,
             'price': product.price,
+            'description': product.description,
             'status': product.status,
             'quantity': product.quantity
         })
