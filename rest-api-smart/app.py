@@ -125,7 +125,7 @@ def get_transaction():
     return jsonify(serialised)
 
 
-@app.route('/users', methods=['GET'])
+'''@app.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
     serialised = []
@@ -136,7 +136,7 @@ def get_users():
             'surname': user.surname,
             'birth date': user.birth_date
         })
-    return jsonify(serialised)
+    return jsonify(serialised)'''
 
 
 @app.route('/shops', methods=['POST'])
@@ -167,7 +167,7 @@ def update_products():
     return jsonify(serialised)
 
 
-@app.route('/users', methods=['POST'])
+'''@app.route('/users', methods=['POST'])
 def update_users():
     new_one = Store(**request.json)
     session.add(new_one)
@@ -178,7 +178,7 @@ def update_users():
         'surname': new_one.surname,
         'birth date': new_one.birth_date
     }
-    return jsonify(serialised)
+    return jsonify(serialised)'''
 
 
 @app.route('/transaction', methods=['POST'])

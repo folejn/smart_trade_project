@@ -12,6 +12,7 @@ class Store(Base):
     description = db.Column(db.String(500), nullable=False)
 
 
+<<<<<<< Updated upstream
 class User(Base):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -40,6 +41,8 @@ class User(Base):
 
 
 
+=======
+>>>>>>> Stashed changes
 class Product(Base):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
@@ -55,3 +58,36 @@ class Transaction(Base):
     date = db.Column(db.DateTime, nullable=False)
     quantity = db.Column(db.Integer, nullable=True)
     price = db.Column(db.Integer, nullable=True)
+<<<<<<< Updated upstream
+=======
+    sides = relationship("User",
+                    secondary=transaction_user, backref='transactions')
+    wares = relationship("Product",
+                    secondary=transaction_product, backref='transactions')
+
+
+class User(Base):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250), nullable=False)
+    email = db.Column(db.String(250), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, **kwargs):
+        self.name = kwargs.get('name')
+        self.email = kwargs.get('email')
+        self.password = bcrypt.hash(kwargs.get('password'))
+
+    def get_token(self, expire_time=24):
+        expire_delta = timedelta(expire_time)
+        token = create_access_token(
+            identity=self.id, expires_delta=expire_delta)
+        return token
+
+    @classmethod
+    def authenticate(cls, email, password):
+        user = cls.query.filter(cls.email == email).one()
+        if not bcrypt.verify(password, user.password):
+            raise Exception('No user with this password')
+        return user
+>>>>>>> Stashed changes
