@@ -25,7 +25,7 @@ class User(Base):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
     email = db.Column(db.String(30), nullable=False)
-    password = db.Column(db.DateTime, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
     #shops = relationship('Store', backref='user', lazy=True)
 
 
