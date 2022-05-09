@@ -3,9 +3,11 @@ import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required
+from config import Config
 
 app = Flask(__name__)
+app.config.from_object(Config)
 
 client = app.test_client()
 
