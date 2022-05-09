@@ -292,7 +292,7 @@ def delete_product(product_id):
     if not item:
         return {'message': 'No product with the same id'}, 400
     session.delete(item)
-    session.commite()
+    session.commit()
     return '', 204
 
 
@@ -302,7 +302,7 @@ def delete_transaction(transaction_id):
     if not item:
         return {'message': 'No transaction with the same id'}, 400
     session.delete(item)
-    session.commite()
+    session.commit()
     return '', 204
 
 
