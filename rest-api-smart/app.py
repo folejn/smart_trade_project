@@ -4,10 +4,8 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from flask_jwt_extended import JWTManager, jwt_required
-from config import Config
 
 app = Flask(__name__)
-app.config.from_object(Config)
 app.config["JWT_SECRET_KEY"] = "af6b72e8e3cc4dd1a1f40a9e0b029ad6"
 
 client = app.test_client()
@@ -298,6 +296,14 @@ def register():
     user = User(**params)
     session.add(user)
     session.commit()
+    token = user.get_token()
+    return {'access_token': token}
+
+
+@app.route('/login', methods={'POST'})
+def login():
+    params = request.json
+    user = User.authenticate(**params)
     token = user.get_token()
     return {'access_token': token}
 
