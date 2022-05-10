@@ -24,64 +24,6 @@ from models import *
 
 Base.metadata.create_all(bind=engine)
 
-shops = [
-    {
-        'id': 1,
-        'title': 'AliExpress',
-        'description': 'More than everything.'
-    },
-    {
-        'id': 2,
-        'title': 'Allegro',
-        'description': 'Today and right now.'
-    },
-    {
-        'id': 3,
-        'title': 'Random shop',
-        'description': 'Random description.'
-    }
-]
-
-products = [
-    {
-        'id': 1,
-        'name': 'prod1',
-        'price': 10,
-        'status': 'created',
-        'quantity': 3
-    },
-    {
-        'id': 2,
-        'name': 'prod2',
-        'price': 10,
-        'status': 'approved',
-        'quantity': 2
-    },
-    {
-        'id': 3,
-        'name': 'prod3',
-        'price': 5,
-        'status': 'created',
-        'quantity': 7
-    }
-]
-
-transaction = [
-    {
-        'id': 1,
-        'date': 5613,
-        'quantity': 10,
-        'price': 25
-    },
-    {
-        'id': 2,
-        'date': 6113,
-        'quantity': 10,
-        'price': 24
-    }
-]
-
-
 @app.route('/shops', methods=['GET'])
 @jwt_required()
 def get_stores():
