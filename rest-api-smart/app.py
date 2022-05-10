@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from flask_jwt_extended import JWTManager, jwt_required
 
+
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "af6b72e8e3cc4dd1a1f40a9e0b029ad6"
 
@@ -82,6 +83,7 @@ transaction = [
 
 
 @app.route('/shops', methods=['GET'])
+@jwt_required()
 def get_stores():
     stores = Store.query.all()
     serialised = []
@@ -95,6 +97,7 @@ def get_stores():
 
 
 @app.route('/products', methods=['GET'])
+@jwt_required()
 def get_products():
     products = Product.query.all()
     serialised = []
@@ -139,6 +142,7 @@ def get_users():
 
 
 @app.route('/shops', methods=['POST'])
+@jwt_required()
 def update_stores():
     new_one = Store(**request.json)
     session.add(new_one)
@@ -152,6 +156,7 @@ def update_stores():
 
 
 @app.route('/products', methods=['POST'])
+@jwt_required()
 def new_product():
     new_one = Product(**request.json)
     session.add(new_one)
@@ -195,6 +200,7 @@ def new_transaction():
 
 
 @app.route('/shops/<int:shop_id>', methods=['PUT'])
+@jwt_required()
 def update_shop(shop_id):
     item = Store.query.filter(Store.id == shop_id).first()
     params = request.json
@@ -212,6 +218,7 @@ def update_shop(shop_id):
 
 
 @app.route('/products/<int:product_id>', methods=['PUT'])
+@jwt_required()
 def update_product(product_id):
     item = Product.query.filter(Product.id == product_id).first()
     params = request.json
@@ -230,6 +237,7 @@ def update_product(product_id):
     return serialised
 
 @app.route('/products/name/<string:product_subname>', methods=['GET'])
+@jwt_required()
 def search_product_by_name(product_subname):
     products = Product.query.filter(Product.name.contains(product_subname)).all()
     if not products:
@@ -246,6 +254,7 @@ def search_product_by_name(product_subname):
     return jsonify(serialised)
 
 @app.route('/products/description/<string:product_subdescr>', methods=['GET'])
+@jwt_required()
 def search_product_by_desc(product_subdescr):
     products = Product.query.filter(Product.description.contains(product_subdescr)).all()
     if not products:
@@ -281,6 +290,7 @@ def update_transaction(transaction_id):
 
 
 @app.route('/shops/<int:shop_id>', methods=['DELETE'])
+@jwt_required()
 def delete_shop(shop_id):
     item = Store.query.filter(Store.id == shop_id).first()
     if not item:
