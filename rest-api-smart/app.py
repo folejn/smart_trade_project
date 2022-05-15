@@ -244,6 +244,9 @@ def delete_shop(shop_id):
 
 @app.route('/register', methods=['POST'])
 def register():
+    email = request.form['email']
+    if User.query.filter(User.email == email):
+        return {'message': 'Email is already exist.'}, 400
     params = request.json
     user = User(**params)
     session.add(user)
@@ -254,6 +257,9 @@ def register():
 
 @app.route('/login', methods={'POST'})
 def login():
+    email = request.form['email']
+    if not User.query.filter(User.email == email):
+        return {'message': 'Email does not exist.'}, 400
     params = request.json
     user = User.authenticate(**params)
     token = user.get_token()
