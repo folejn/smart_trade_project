@@ -1,1 +1,1 @@
-web: gunicorn rest-api-smart/app:app
+web: gunicorn wsgi:app
