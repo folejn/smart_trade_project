@@ -23,9 +23,9 @@ class Store(Base):
 class User(Base):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30), nullable=False)
-    surname = db.Column(db.String(30), nullable=False)
-    birth_date = db.Column(db.DateTime, nullable=False)
+    name = db.Column(db.String(30), nullable=True)
+    surname = db.Column(db.String(30), nullable=True)
+    birth_date = db.Column(db.DateTime, nullable=True)
     products = relationship('Product', backref='owner', lazy=True)
     email = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
