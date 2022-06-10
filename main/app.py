@@ -3,7 +3,7 @@ import sqlalchemy as db
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
 
 app = Flask(__name__)
@@ -50,7 +50,8 @@ def get_products():
             'price': product.price,
             'description': product.description,
             'status': product.status,
-            'quantity': product.quantity
+            'quantity': product.quantity,
+            'seller_address': product.owner.address
         })
     return jsonify(serialised)
 
@@ -96,21 +97,20 @@ def update_stores():
     }
     return jsonify(serialised)
 
+@app.route('/products/<int:id>/buy', methods=['POST'])
+@jwt_required
+def buy_product(id):
+    pass
 
 @app.route('/products', methods=['POST'])
 @jwt_required()
 def new_product():
     new_one = Product(**request.json)
+    user_id = get_jwt_identity()
+    new_one.users_id = user_id
     session.add(new_one)
     session.commit()
-    serialised = {
-        'id': new_one.id,
-        'name': new_one.name,
-        'price': new_one.price,
-        'status': new_one.status,
-        'quantity': new_one.quantity
-    }
-    return jsonify(serialised)
+    return 'New product added!', 200
 
 
 '''@app.route('/users', methods=['POST'])
@@ -166,6 +166,7 @@ def update_product(product_id):
     params = request.json
     if not item:
         return {'message': 'No product with the same id'}, 400
+    owner = item.owner
     for key, value in params.items():
         setattr(item, key, value)
     session.commit()
@@ -174,7 +175,8 @@ def update_product(product_id):
         'name': item.name,
         'price': item.price,
         'status': item.status,
-        'quantity': item.quantity
+        'quantity': item.quantity,
+        'seller_address': owner.address
     }
     return serialised
 

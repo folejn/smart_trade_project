@@ -29,6 +29,7 @@ class User(Base):
     products = relationship('Product', backref='owner', lazy=True)
     email = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
+    address = db.Column(db.String(30), nullable=True)
     #shops = relationship('Store', backref='user', lazy=True)
 
 
@@ -38,7 +39,7 @@ class User(Base):
         self.password = bcrypt.hash(kwargs.get('password'))
 
 
-    def get_token(self, expire_time=24):
+    def get_token(self, expire_time=240):
         expire_delta = timedelta(expire_time)
         token = create_access_token(
             identity=self.id, expires_delta=expire_delta)
