@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+import datetime
 
 
 app = Flask(__name__)
@@ -23,19 +24,6 @@ jwt = JWTManager(app)
 from main.models import *
 
 Base.metadata.create_all(bind=engine)
-
-@app.route('/shops', methods=['GET'])
-@jwt_required()
-def get_stores():
-    stores = Store.query.all()
-    serialised = []
-    for store in stores:
-        serialised.append({
-            'id': store.id,
-            'title': store.title,
-            'description': store.description
-        })
-    return jsonify(serialised)
 
 
 @app.route('/products', methods=['GET'])
@@ -61,14 +49,45 @@ def get_transaction():
     transactions = Transaction.query.all()
     serialised = []
     for transaction in transactions:
-        serialised.append({
-            'id': transaction.id,
-            'date': transaction.date,
-            'quantity': transaction.quantity,
-            'price': transaction.price
-        })
+        if transaction.sides is not None:
+            addresses = [side.address for side in transaction.sides]
+            serialised.append({
+                'id': transaction.id,
+                'date': transaction.date,
+                'price': transaction.price,
+                'seller_address': addresses[0],
+                'buyer_address': addresses[1]
+            })
+        else:
+            serialised.append({
+                'id': transaction.id,
+                'date': transaction.date,
+                'price': transaction.price
+            })
     return jsonify(serialised)
-
+'''
+@app.route('/user/<int: user_id>/transaction', methods=['GET'])
+def get_users_transaction(id):
+    transactions = Transaction.query.all()
+    serialised = []
+    for transaction in transactions:
+        if transaction.sides is not None:
+            addresses = [side.address for side in transaction.sides]
+            serialised.append({
+                'id': transaction.id,
+                'date': transaction.date,
+                'price': transaction.price,
+                'seller_address': addresses[0],
+                'buyer_address': addresses[1]
+            })
+        else:
+            serialised.append({
+                'id': transaction.id,
+                'date': transaction.date,
+                'price': transaction.price
+            })
+    return jsonify(serialised)
+'''
 
 '''@app.route('/users', methods=['GET'])
 def get_users():
@@ -83,23 +102,10 @@ def get_users():
         })
     return jsonify(serialised)'''
 
-
-@app.route('/shops', methods=['POST'])
-@jwt_required()
-def update_stores():
-    new_one = Store(**request.json)
-    session.add(new_one)
-    session.commit()
-    serialised = {
-        'id': new_one.id,
-        'title': new_one.title,
-        'description': new_one.description
-    }
-    return jsonify(serialised)
-
-@app.route('/products/<int:id>/buy', methods=['POST'])
+@app.route('/products/buy', methods=['POST'])
 @jwt_required
-def buy_product(id):
+def buy_product():
+    products = request.json
     pass
 
 @app.route('/products', methods=['POST'])
@@ -128,35 +134,19 @@ def update_users():
 
 
 @app.route('/transaction', methods=['POST'])
+@jwt_required()
 def new_transaction():
-    new_one = Transaction(**request.json)
+    price = request.json['price']
+    date = datetime.datetime.now()
+    new_one = Transaction(date = date, price=price)
     session.add(new_one)
     session.commit()
     serialised = {
         'id': new_one.id,
-        'date': new_one.date,
-        'quantity': new_one.quantity,
-        'price': new_one.price
+        'price': new_one.price,
+        'date': new_one.date
     }
-    return jsonify(serialised)
-
-
-@app.route('/shops/<int:shop_id>', methods=['PUT'])
-@jwt_required()
-def update_shop(shop_id):
-    item = Store.query.filter(Store.id == shop_id).first()
-    params = request.json
-    if not item:
-        return {'message': 'No shop with the same id'}, 400
-    for key, value in params.items():
-        setattr(item, key, value)
-    session.commit()
-    serialised = {
-        'id': item.id,
-        'title': item.title,
-        'description': item.description
-    }
-    return serialised
+    return jsonify(serialised),200
 
 
 @app.route('/products/<int:product_id>', methods=['PUT'])
@@ -227,21 +217,9 @@ def update_transaction(transaction_id):
     serialised = {
         'id': item.id,
         'date': item.date,
-        'quantity': item.quantity,
         'price': item.price
     }
     return serialised
-
-
-@app.route('/shops/<int:shop_id>', methods=['DELETE'])
-@jwt_required()
-def delete_shop(shop_id):
-    item = Store.query.filter(Store.id == shop_id).first()
-    if not item:
-        return {'message': 'No shop with the same id'}, 400
-    session.delete(item)
-    session.commit()
-    return '', 204
 
 
 @app.route('/register', methods=['POST'])
